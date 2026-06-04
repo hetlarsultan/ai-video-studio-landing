@@ -5,6 +5,7 @@ import { ArrowRight, Zap, Lock, Gauge, Sparkles, Film, Code2, BarChart3 } from "
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { ContactForm } from "@/components/ContactForm";
 
 // Animation configuration following the Animation Guide
 const ANIMATION_CONFIG = {
@@ -544,6 +545,33 @@ export default function Home() {
                 </Card>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-12 md:py-20 border-t border-slate-700/50">
+        <div className="container max-w-7xl mx-auto px-4">
+          <motion.div
+            className="text-center mb-12 md:mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <Badge className="mb-4 bg-purple-500/20 text-purple-300 border-purple-500/50">
+              📧 تواصل معنا
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              هل لديك أسئلة أو اقتراحات؟
+            </h2>
+            <p className="text-base md:text-lg text-slate-400">
+              نحن هنا للإجابة على جميع استفساراتك والاستماع إلى آرائك
+            </p>
+          </motion.div>
+
+          <div className="max-w-2xl mx-auto">
+            <ContactForm />
           </div>
         </div>
       </section>
