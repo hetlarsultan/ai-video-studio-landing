@@ -3,11 +3,17 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Zap, Lock, Gauge, Sparkles, Film, Code2, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 // Animation configuration following the Animation Guide
 const ANIMATION_CONFIG = {
   duration: 0.25, // 250ms - snappy, under 300ms
+};
+
+// Reduced animation config for mobile devices
+const MOBILE_ANIMATION_CONFIG = {
+  duration: 0.15, // Faster animations on mobile
 };
 
 // Style card component with interactive motion effects
@@ -29,6 +35,8 @@ function StyleCard({
   isHighlighted?: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
 
   // Determine border color based on accent
   const borderColorClass = {
@@ -64,24 +72,26 @@ function StyleCard({
   return (
     <motion.div
       className="group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => !isMobile && setIsHovered(true)}
+      onMouseLeave={() => !isMobile && setIsHovered(false)}
+      onTouchStart={() => isMobile && setIsHovered(true)}
+      onTouchEnd={() => isMobile && setIsHovered(false)}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: ANIMATION_CONFIG.duration }}
+      transition={{ duration: prefersReducedMotion ? 0 : ANIMATION_CONFIG.duration }}
       viewport={{ once: true, margin: "-100px" }}
     >
       <motion.div
         animate={{
-          scale: isHovered ? 1.02 : 1,
-          y: isHovered ? -8 : 0,
+          scale: isHovered && !isMobile ? 1.02 : 1,
+          y: isHovered && !isMobile ? -8 : 0,
         }}
         transition={{
-          duration: ANIMATION_CONFIG.duration,
+          duration: prefersReducedMotion ? 0 : MOBILE_ANIMATION_CONFIG.duration,
           ease: "easeOut",
         }}
       >
-        <Card className={`bg-gradient-to-br from-slate-700/50 to-slate-800/50 border-slate-600/50 p-8 h-full ${borderColorClass} transition-all relative overflow-hidden`}>
+        <Card className={`bg-gradient-to-br from-slate-700/50 to-slate-800/50 border-slate-600/50 p-6 md:p-8 h-full ${borderColorClass} transition-all relative overflow-hidden`}>
           {/* Animated glow effect on hover */}
           <motion.div
             className="absolute inset-0 bg-gradient-to-br opacity-0 pointer-events-none"
@@ -95,10 +105,10 @@ function StyleCard({
               }, transparent)`,
             }}
             animate={{
-              opacity: isHovered ? 1 : 0,
+              opacity: isHovered && !isMobile ? 1 : 0,
             }}
             transition={{
-              duration: ANIMATION_CONFIG.duration,
+              duration: prefersReducedMotion ? 0 : MOBILE_ANIMATION_CONFIG.duration,
               ease: "easeOut",
             }}
           />
@@ -109,11 +119,11 @@ function StyleCard({
             <motion.div
               className={`${bgColorClass} rounded-lg p-6 mb-6 border ${borderInnerClass}`}
               animate={{
-                rotate: isHovered ? 6 : 0,
-                scale: isHovered ? 1.1 : 1,
+                rotate: isHovered && !isMobile ? 6 : 0,
+                scale: isHovered && !isMobile ? 1.1 : 1,
               }}
               transition={{
-                duration: ANIMATION_CONFIG.duration,
+                duration: prefersReducedMotion ? 0 : MOBILE_ANIMATION_CONFIG.duration,
                 ease: "easeOut",
               }}
             >
@@ -124,7 +134,7 @@ function StyleCard({
             <motion.h3
               className="text-2xl font-bold text-white mb-2"
               animate={{
-                color: isHovered
+                color: isHovered && !isMobile
                   ? accentColor === "green"
                     ? "#4ade80"
                     : accentColor === "cyan"
@@ -133,7 +143,7 @@ function StyleCard({
                   : "#ffffff",
               }}
               transition={{
-                duration: ANIMATION_CONFIG.duration,
+                duration: prefersReducedMotion ? 0 : MOBILE_ANIMATION_CONFIG.duration,
                 ease: "easeOut",
               }}
             >
@@ -149,12 +159,12 @@ function StyleCard({
                   key={index}
                   className="flex items-center gap-2 text-slate-300"
                   animate={{
-                    x: isHovered ? 4 : 0,
-                    opacity: isHovered ? 1 : 0.8,
+                    x: isHovered && !isMobile ? 4 : 0,
+                    opacity: isHovered && !isMobile ? 1 : 0.8,
                   }}
                   transition={{
-                    duration: ANIMATION_CONFIG.duration,
-                    delay: index * 0.05,
+                    duration: prefersReducedMotion ? 0 : MOBILE_ANIMATION_CONFIG.duration,
+                    delay: prefersReducedMotion ? 0 : index * 0.05,
                     ease: "easeOut",
                   }}
                 >
@@ -177,10 +187,10 @@ function StyleCard({
             {/* Badge with scale animation */}
             <motion.div
             animate={{
-              scale: isHovered ? 1.05 : 1,
+              scale: isHovered && !isMobile ? 1.05 : 1,
             }}
             transition={{
-              duration: ANIMATION_CONFIG.duration,
+              duration: prefersReducedMotion ? 0 : MOBILE_ANIMATION_CONFIG.duration,
               ease: "easeOut",
             }}
             >
@@ -210,16 +220,16 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button className="bg-cyan-500 hover:bg-cyan-600 text-white">
-              فتح التطبيق <ArrowRight className="w-4 h-4 ml-2" />
+            <Button className="bg-cyan-500 hover:bg-cyan-600 text-white text-sm md:text-base">
+              فتح التطبيق <ArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2" />
             </Button>
           </a>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="container max-w-7xl mx-auto px-4 py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="container max-w-7xl mx-auto px-4 py-12 md:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <motion.div
             className="space-y-6"
             initial={{ opacity: 0, x: -20 }}
@@ -229,24 +239,24 @@ export default function Home() {
             <Badge className="w-fit bg-cyan-500/20 text-cyan-300 border-cyan-500/50">
               🚀 تقنية مبتكرة
             </Badge>
-            <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
               إنشاء فيديوهات احترافية
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500"> بدون إنترنت</span>
             </h1>
-            <p className="text-xl text-slate-300 leading-relaxed">
+            <p className="text-base md:text-xl text-slate-300 leading-relaxed">
               محرر فيديو قوي يعمل بالكامل محلياً على جهازك. معالجة سريعة، خصوصية مطلقة، وأنماط بصرية احترافية.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
               <a 
                 href="https://3001-i7wqqfbrecliu5p39l6ke-8433bba1.us2.manus.computer"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white">
-                  جرب الآن مجاناً <Sparkles className="w-5 h-5 ml-2" />
-                </Button>
-              </a>
-              <Button size="lg" variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-800">
+            <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white w-full sm:w-auto">
+              جرب الآن مجاناً <Sparkles className="w-4 h-4 md:w-5 md:h-5 ml-2" />
+            </Button>
+            </a>
+              <Button size="lg" variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-800 w-full sm:w-auto">
                 اقرأ المزيد
               </Button>
             </div>
@@ -284,7 +294,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 border-t border-slate-700/50">
+      <section className="py-12 md:py-20 border-t border-slate-700/50">
         <div className="container max-w-7xl mx-auto px-4">
           <motion.div
             className="text-center mb-16"
@@ -304,7 +314,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {/* Feature 1 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -357,7 +367,7 @@ export default function Home() {
       </section>
 
       {/* Visual Styles Section - With Interactive Motion Effects */}
-      <section className="py-20 border-t border-slate-700/50">
+      <section className="py-12 md:py-20 border-t border-slate-700/50">
         <div className="container max-w-7xl mx-auto px-4">
           <motion.div
             className="text-center mb-16"
@@ -377,7 +387,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
             {/* Basic Style */}
             <StyleCard
               title="النمط البسيط"
@@ -425,7 +435,7 @@ export default function Home() {
       </section>
 
       {/* Performance Comparison */}
-      <section className="py-20 border-t border-slate-700/50">
+      <section className="py-12 md:py-20 border-t border-slate-700/50">
         <div className="container max-w-7xl mx-auto px-4">
           <motion.div
             className="text-center mb-16"
@@ -442,8 +452,8 @@ export default function Home() {
             </h2>
           </motion.div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto -mx-4 md:mx-0">
+            <table className="w-full text-xs md:text-sm">
               <thead>
                 <tr className="border-b border-slate-600/50">
                   <th className="text-left py-4 px-4 text-slate-300 font-semibold">المعيار</th>
@@ -490,7 +500,7 @@ export default function Home() {
       </section>
 
       {/* Templates Section */}
-      <section className="py-20 border-t border-slate-700/50">
+      <section className="py-12 md:py-20 border-t border-slate-700/50">
         <div className="container max-w-7xl mx-auto px-4">
           <motion.div
             className="text-center mb-16"
@@ -510,7 +520,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
             {[
               { category: "الموسيقى", count: 3 },
               { category: "التسويق", count: 2 },
@@ -539,19 +549,19 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 border-t border-slate-700/50">
+      <section className="py-12 md:py-20 border-t border-slate-700/50">
         <div className="container max-w-7xl mx-auto px-4">
           <motion.div
-            className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-2xl p-12 text-center"
+            className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-2xl p-6 md:p-12 text-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-white mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
               هل أنت مستعد لإنشاء فيديوهات احترافية؟
             </h2>
-            <p className="text-xl text-slate-300 mb-8">
+            <p className="text-base md:text-xl text-slate-300 mb-6 md:mb-8">
               ابدأ الآن بدون الحاجة إلى تسجيل أو دفع أي شيء
             </p>
             <a 
@@ -568,9 +578,9 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-700/50 py-12">
+      <footer className="border-t border-slate-700/50 py-8 md:py-12">
         <div className="container max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Film className="w-6 h-6 text-cyan-400" />
@@ -604,7 +614,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-700/50 pt-8 text-center text-slate-400 text-sm">
+          <div className="border-t border-slate-700/50 pt-6 md:pt-8 text-center text-slate-400 text-xs md:text-sm">
             <p>© 2026 AI Video Studio Pro. جميع الحقوق محفوظة.</p>
           </div>
         </div>
