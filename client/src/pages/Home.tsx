@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { ContactForm } from "@/components/ContactForm";
+import { PageTransition, StaggerContainer, StaggerItem, ScrollReveal, Parallax, FadeInOnScroll, BounceIn } from "@/components/PageTransition";
+import { LoadingSpinner, SkeletonLoader } from "@/components/LoadingSpinner";
 
 // Animation configuration following the Animation Guide
 const ANIMATION_CONFIG = {
@@ -207,6 +209,22 @@ function StyleCard({
 }
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate page load
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center">
+        <LoadingSpinner variant="orbit" size="lg" color="cyan" text="جاري تحميل التطبيق..." />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Navigation */}
@@ -370,23 +388,19 @@ export default function Home() {
       {/* Visual Styles Section - With Interactive Motion Effects */}
       <section className="py-12 md:py-20 border-t border-slate-700/50">
         <div className="container max-w-7xl mx-auto px-4">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
-            <Badge className="mb-4 bg-purple-500/20 text-purple-300 border-purple-500/50">
-              🎨 الأنماط البصرية
-            </Badge>
-            <h2 className="text-4xl font-bold text-white mb-4">
-              ثلاثة أنماط بصرية احترافية
-            </h2>
-            <p className="text-lg text-slate-400">
-              اختر النمط الذي يناسب مشروعك من بين خيارات متعددة
-            </p>
-          </motion.div>
+          <PageTransition variant="fadeInUp" duration={0.6}>
+            <div className="text-center mb-16">
+              <Badge className="mb-4 bg-pink-500/20 text-pink-300 border-pink-500/50">
+                🎯 الأنماط البصرية
+              </Badge>
+              <h2 className="text-4xl font-bold text-white mb-4">
+                ثلاثة أنماط بصرية احترافية
+              </h2>
+              <p className="text-lg text-slate-400">
+                اختر النمط الذي يناسب مشروعك من بين خيارات متعددة
+              </p>
+            </div>
+          </PageTransition>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
             {/* Basic Style */}
