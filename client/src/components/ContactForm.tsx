@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, CheckCircle, Mail, Phone, MessageSquare, User } from 'lucide-react';
