@@ -9,6 +9,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { PageTransition, StaggerContainer, StaggerItem, ScrollReveal, Parallax, FadeInOnScroll, BounceIn } from "@/components/PageTransition";
 import { LoadingSpinner, SkeletonLoader } from "@/components/LoadingSpinner";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 // Animation configuration following the Animation Guide
 const ANIMATION_CONFIG = {
@@ -228,6 +229,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <ScrollToTop variant="arrow" position="right" />
       {/* Navigation */}
       <nav className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 dark:bg-slate-950/80 border-b border-slate-700/50 dark:border-slate-800/50 transition-colors">
         <div className="container max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
