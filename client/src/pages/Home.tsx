@@ -8,6 +8,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { ContactForm } from "@/components/ContactForm";
 import { PageTransition, StaggerContainer, StaggerItem, ScrollReveal, Parallax, FadeInOnScroll, BounceIn } from "@/components/PageTransition";
 import { LoadingSpinner, SkeletonLoader } from "@/components/LoadingSpinner";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 // Animation configuration following the Animation Guide
 const ANIMATION_CONFIG = {
@@ -228,21 +229,24 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-slate-700/50">
+      <nav className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 dark:bg-slate-950/80 border-b border-slate-700/50 dark:border-slate-800/50 transition-colors">
         <div className="container max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Film className="w-8 h-8 text-cyan-400" />
-            <span className="text-xl font-bold text-white">AI Video Studio Pro</span>
+            <span className="text-xl font-bold text-white dark:text-slate-100 transition-colors">AI Video Studio Pro</span>
           </div>
-          <a 
-            href="https://3001-i7wqqfbrecliu5p39l6ke-8433bba1.us2.manus.computer"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button className="bg-cyan-500 hover:bg-cyan-600 text-white text-sm md:text-base">
-              فتح التطبيق <ArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2" />
-            </Button>
-          </a>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <a 
+              href="https://3001-i7wqqfbrecliu5p39l6ke-8433bba1.us2.manus.computer"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button className="bg-cyan-500 hover:bg-cyan-600 text-white text-sm md:text-base">
+                فتح التطبيق <ArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2" />
+              </Button>
+            </a>
+          </div>
         </div>
       </nav>
 
