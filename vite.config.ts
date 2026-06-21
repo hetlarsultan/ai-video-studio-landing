@@ -219,6 +219,22 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+    sourcemap: false,
   },
   server: {
     port: 3000,
@@ -237,5 +253,10 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
-  },
+    hmr: {
+      protocol: "wss",
+      host: process.env.VITE_HMR_HOST || "localhost",
+      port: process.env.VITE_HMR_PORT ? parseInt(process.env.VITE_HMR_PORT) : 443,
+    },
+  }
 });

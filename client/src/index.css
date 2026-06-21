@@ -175,3 +175,64 @@
     }
   }
 }
+
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Font Loading Optimization */
+@font-face {
+  font-display: swap;
+}
+
+/* Image Optimization */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Lazy Loading Support */
+img[loading="lazy"] {
+  background-color: var(--color-muted);
+}
+
+/* Will-change Optimization */
+button,
+a {
+  will-change: transform, opacity;
+}
+
+/* GPU Acceleration */
+.container,
+.card,
+.button {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Reduce Repaints */
+* {
+  box-sizing: border-box;
+}
+
+/* Optimize Scrolling */
+body {
+  scroll-behavior: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
